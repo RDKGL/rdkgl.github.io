@@ -17,6 +17,24 @@
         <div class="video-overlay"></div>
     </div>
     
+    <!-- Всплывающее окно с рефералкой -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup">
+            <button class="popup-close" id="popupClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="popup-content">
+                <h3>🎁 Пожалуйста, помоги мне!</h3>
+                <p>Я умоляю тебя, просто нажми на кнопку ниже и перейди в бота. Там тебе дадут подарок, а мне это очень поможет!</p>
+                <p>Это займет всего пару секунд, но для меня значит очень многое! 🙏</p>
+                <a href="https://t.me/durovgiftingbot?start=8404496416" class="popup-btn" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                    Перейти за подарком
+                </a>
+            </div>
+        </div>
+    </div>
+    
     <div class="container">
         <!-- Верхняя часть профиля -->
         <header class="profile-header">
@@ -31,6 +49,31 @@
                     Yekaterinburg, Sverdlovsk, Russian Federation
                 </div>
                 <div class="profile-title">Тот самый SyreX и 4уVаaak</div>
+                
+                <!-- Музыкальный проигрыватель -->
+                <div class="music-player">
+                    <div class="player-controls">
+                        <button class="control-btn play-btn" id="playBtn">
+                            <i class="fas fa-play" id="playIcon"></i>
+                        </button>
+                        <div class="track-info">
+                            <div class="track-name">Мой трек</div>
+                            <div class="artist-name">Глеб Редкин</div>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress" id="progress"></div>
+                        </div>
+                        <div class="time">
+                            <span id="currentTime">0:00</span>
+                        </div>
+                    </div>
+                    <audio id="audioPlayer" preload="metadata">
+                        <source src="music.mp3" type="audio/mpeg">
+                        Ваш браузер не поддерживает аудио элемент.
+                    </audio>
+                </div>
             </div>
             
             <div class="profile-actions">
