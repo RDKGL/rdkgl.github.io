@@ -5,18 +5,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     menuItems.forEach(item => {
         item.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Убираем активный класс у всех пунктов меню и вкладок
-            menuItems.forEach(i => i.classList.remove('active'));
-            tabContents.forEach(tab => tab.classList.remove('active'));
-            
-            // Добавляем активный класс текущему пункту
-            this.classList.add('active');
-            
-            // Показываем соответствующую вкладку
-            const tabId = this.getAttribute('data-tab');
-            document.getElementById(tabId).classList.add('active');
+            // Проверяем, есть ли у элемента data-tab (вкладка) или это внешняя ссылка
+            if (this.getAttribute('data-tab')) {
+                e.preventDefault();
+                
+                // Убираем активный класс у всех пунктов меню и вкладок
+                menuItems.forEach(i => i.classList.remove('active'));
+                tabContents.forEach(tab => tab.classList.remove('active'));
+                
+                // Добавляем активный класс текущему пункту
+                this.classList.add('active');
+                
+                // Показываем соответствующую вкладку
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            }
+            // Если нет data-tab, то это внешняя ссылка и она откроется в новой вкладке
         });
     });
     
