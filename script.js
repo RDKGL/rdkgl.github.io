@@ -1,3 +1,4 @@
+
 // Переключение вкладок
 document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('.menu-item');
@@ -5,22 +6,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     menuItems.forEach(item => {
         item.addEventListener('click', function(e) {
-            // Проверяем, есть ли у элемента data-tab (вкладка) или это внешняя ссылка
             if (this.getAttribute('data-tab')) {
                 e.preventDefault();
                 
-                // Убираем активный класс у всех пунктов меню и вкладок
                 menuItems.forEach(i => i.classList.remove('active'));
                 tabContents.forEach(tab => tab.classList.remove('active'));
                 
-                // Добавляем активный класс текущему пункту
                 this.classList.add('active');
-                
-                // Показываем соответствующую вкладку
                 const tabId = this.getAttribute('data-tab');
                 document.getElementById(tabId).classList.add('active');
             }
-            // Если нет data-tab, то это внешняя ссылка и она откроется в новой вкладке
         });
     });
     
@@ -31,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
         element.addEventListener('click', function() {
             const textToCopy = this.textContent;
             
-            // Создаем временный textarea для копирования
             const textarea = document.createElement('textarea');
             textarea.value = textToCopy;
             document.body.appendChild(textarea);
@@ -39,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.execCommand('copy');
             document.body.removeChild(textarea);
             
-            // Визуальное подтверждение
             const originalText = this.textContent;
             this.textContent = 'Скопировано!';
             this.style.background = '#8a2be2';
@@ -55,14 +48,80 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Управление видео фоном
     const bgVideo = document.getElementById('bgVideo');
-    
-    // Гарантируем, что видео без звука
     bgVideo.muted = true;
     bgVideo.volume = 0;
     
-    // Перезапуск видео если оно остановилось
     bgVideo.addEventListener('ended', function() {
         this.currentTime = 0;
         this.play();
+    });
+    
+    // Музыкальный проигрыватель
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const progressBar = document.getElementById('progressBar');
+    const progress = document.getElementById('progress');
+    const currentTime = document.getElementById('currentTime');
+    
+    let isPlaying = false;
+    
+    // Воспроизведение/пауза
+    playBtn.addEventListener('click', function() {
+        if (isPlaying) {
+            audioPlayer.pause();
+            playIcon.className = 'fas fa-play';
+        } else {
+            audioPlayer.play();
+            playIcon.className = 'fas fa-pause';
+        }
+        isPlaying = !isPlaying;
+    });
+    
+    // Обновление прогресса
+    audioPlayer.addEventListener('timeupdate', function() {
+        const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progress.style.width = percent + '%';
+        
+        // Форматирование времени
+        const minutes = Math.floor(audioPlayer.currentTime / 60);
+        const seconds = Math.floor(audioPlayer.currentTime % 60);
+        currentTime.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+    });
+    
+    // Перемотка по клику на прогресс-бар
+    progressBar.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        audioPlayer.currentTime = percent * audioPlayer.duration;
+    });
+    
+    // Сброс при окончании трека
+    audioPlayer.addEventListener('ended', function() {
+        playIcon.className = 'fas fa-play';
+        isPlaying = false;
+        progress.style.width = '0%';
+        currentTime.textContent = '0:00';
+    });
+    
+    // Всплывающее окно
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupClose = document.getElementById('popupClose');
+    
+    // Показываем popup при загрузке
+    setTimeout(() => {
+        popupOverlay.style.display = 'flex';
+    }, 1000);
+    
+    // Закрытие popup
+    popupClose.addEventListener('click', function() {
+        popupOverlay.style.display = 'none';
+    });
+    
+    // Закрытие по клику на overlay
+    popupOverlay.addEventListener('click', function(e) {
+        if (e.target === popupOverlay) {
+            popupOverlay.style.display = 'none';
+        }
     });
 });
