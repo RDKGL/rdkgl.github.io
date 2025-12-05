@@ -1,935 +1,200 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background: #1b2838;
-    color: #c7d5e0;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* Видео фон */
-.video-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    overflow: hidden;
-    background: #1b2838;
-}
-
-#bgVideo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: cover;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-}
-
-.video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(27, 40, 56, 0.6), rgba(40, 13, 56, 0.5));
-    z-index: -1;
-    backdrop-filter: blur(0.5px);
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Шапка профиля */
-.profile-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, rgba(40, 13, 56, 0.25), rgba(75, 0, 130, 0.15));
-    padding: 20px;
-    border-radius: 20px;
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 
-        0 8px 32px rgba(75, 0, 130, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: float 5s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
-}
-
-.profile-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s;
-}
-
-.profile-header:hover::before {
-    left: 100%;
-}
-
-.profile-header:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-        0 12px 40px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-.profile-avatar {
-    position: relative;
-    flex-shrink: 0;
-}
-
-.avatar-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 20px;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 8px 32px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: float 4s ease-in-out infinite;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-.avatar-img:hover {
-    transform: scale(1.05);
-    box-shadow: 
-        0 12px 40px rgba(75, 0, 130, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-.profile-info {
-    flex-grow: 1;
-}
-
-.profile-name {
-    color: #ffffff;
-    font-size: 2em;
-    margin-bottom: 5px;
-    font-weight: bold;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.profile-location {
-    color: #b19cd9;
-    margin-bottom: 5px;
-    font-size: 0.9em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.profile-location i {
-    margin-right: 5px;
-}
-
-.profile-title {
-    color: #d8bfd8;
-    font-style: italic;
-    margin-bottom: 15px;
-    font-size: 0.95em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.profile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.btn-message, .btn-more {
-    background: linear-gradient(135deg, rgba(75, 0, 130, 0.6), rgba(90, 26, 140, 0.5));
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px 15px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 
-        0 4px 16px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    animation: float 3s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-message::before, .btn-more::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn-message:hover::before, .btn-more:hover::before {
-    left: 100%;
-}
-
-.btn-message:hover, .btn-more:hover {
-    background: linear-gradient(135deg, rgba(90, 26, 140, 0.7), rgba(138, 43, 226, 0.6));
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 6px 24px rgba(75, 0, 130, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 0 20px rgba(138, 43, 226, 0.3);
-    transform: translateY(-2px);
-    animation: float 2s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-/* Основной контент */
-.main-content {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    gap: 20px;
-}
-
-/* Боковое меню */
-.side-menu {
-    background: linear-gradient(135deg, rgba(40, 13, 56, 0.25), rgba(75, 0, 130, 0.15));
-    border-radius: 20px;
-    padding: 20px;
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 
-        0 8px 32px rgba(75, 0, 130, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
-    position: relative;
-    overflow: hidden;
-}
-
-.side-menu::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
-    animation: rotate 25s linear infinite;
-    pointer-events: none;
-}
-
-.menu-section {
-    margin-bottom: 30px;
-}
-
-.menu-section h3 {
-    color: #b19cd9;
-    font-size: 1.1em;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(75, 0, 130, 0.4);
-    padding-bottom: 5px;
-    text-shadow: 
-        0 1px 2px rgba(0, 0, 0, 0.5),
-        0 0 15px rgba(177, 156, 217, 0.3);
-    background: linear-gradient(135deg, #b19cd9, #d8bfd8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 1px 2px rgba(177, 156, 217, 0.3));
-}
-
-.menu-section ul {
-    list-style: none;
-}
-
-.menu-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 15px;
-    color: #d8bfd8;
-    text-decoration: none;
-    border-radius: 12px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-bottom: 5px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 
-        0 2px 8px rgba(75, 0, 130, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    animation: float 4s ease-in-out infinite;
-    animation-delay: calc(var(--i) * 0.2s);
-    position: relative;
-    overflow: hidden;
-}
-
-.menu-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s;
-}
-
-.menu-item:hover::before {
-    left: 100%;
-}
-
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 
-        0 4px 16px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    animation: float 2s ease-in-out infinite;
-}
-
-.menu-item.active {
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.4), rgba(75, 0, 130, 0.3));
-    color: #ffffff;
-    font-weight: bold;
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 4px 16px rgba(75, 0, 130, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25),
-        0 0 20px rgba(138, 43, 226, 0.3);
-}
-
-.menu-item i {
-    width: 20px;
-    text-align: center;
-}
-
-/* Область контента */
-.content-area {
-    min-height: 500px;
-}
-
-.tab-content {
-    display: none;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.tab-content.active {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.content-box {
-    background: linear-gradient(135deg, rgba(40, 13, 56, 0.25), rgba(75, 0, 130, 0.15));
-    border-radius: 20px;
-    padding: 25px;
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    margin-bottom: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 
-        0 8px 32px rgba(75, 0, 130, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.content-box::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    transition: left 0.6s;
-}
-
-.content-box:hover::before {
-    left: 100%;
-}
-
-.content-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 
-        0 12px 40px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-.content-box h2 {
-    color: #b19cd9;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    text-shadow: 
-        0 1px 2px rgba(0, 0, 0, 0.5),
-        0 0 20px rgba(177, 156, 217, 0.3);
-    background: linear-gradient(135deg, #b19cd9, #d8bfd8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 2px 4px rgba(177, 156, 217, 0.3));
-}
-
-/* Биография */
-.bio-content p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-    color: #d8bfd8;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-}
-
-/* Донат */
-.payment-method {
-    background: linear-gradient(135deg, rgba(40, 13, 56, 0.3), rgba(75, 0, 130, 0.2));
-    margin-bottom: 15px;
-    padding: 20px;
-    border-radius: 16px;
-    border-left: 3px solid rgba(138, 43, 226, 0.5);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 
-        0 4px 16px rgba(75, 0, 130, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.payment-method::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    transition: left 0.5s;
-}
-
-.payment-method:hover::before {
-    left: 100%;
-}
-
-.payment-method:hover {
-    border-left-color: rgba(138, 43, 226, 0.7);
-    box-shadow: 
-        0 6px 20px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    transform: translateX(3px);
-}
-
-.payment-method h3 {
-    color: #ffffff;
-    margin-bottom: 10px;
-    font-size: 1.1em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.payment-info {
-    background: rgba(255, 255, 255, 0.08);
-    padding: 12px;
-    border-radius: 12px;
-    font-family: 'Courier New', monospace;
-    color: #d8bfd8;
-    word-break: break-all;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 
-        0 2px 8px rgba(75, 0, 130, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-.payment-info:hover {
-    background: rgba(138, 43, 226, 0.25);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 
-        0 4px 16px rgba(75, 0, 130, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 0 15px rgba(138, 43, 226, 0.3);
-    transform: translateY(-2px);
-}
-
-/* Умения */
-.skills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-}
-
-.skill-category h3 {
-    color: #b19cd9;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.skill-category ul {
-    list-style: none;
-}
-
-.skill-category li {
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(138, 43, 226, 0.2);
-    color: #d8bfd8;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-}
-
-.skill-category li:last-child {
-    border-bottom: none;
-}
-
-/* Соцсети */
-.content-box a {
-    color: #b19cd9;
-    text-decoration: none;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.content-box a:hover {
-    color: #d8bfd8;
-    text-decoration: underline;
-}
-
-/* Всплывающее окно */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-}
-
-.popup {
-    background: linear-gradient(135deg, rgba(40, 13, 56, 0.3), rgba(75, 0, 130, 0.25));
-    border-radius: 24px;
-    padding: 30px;
-    max-width: 400px;
-    width: 90%;
-    backdrop-filter: blur(50px) saturate(180%);
-    -webkit-backdrop-filter: blur(50px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 
-        0 20px 60px rgba(75, 0, 130, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-.popup::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-    animation: rotate 20s linear infinite;
-}
-
-@keyframes rotate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.popup-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    color: #b19cd9;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    box-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.popup-close:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg) scale(1.1);
-    box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-.popup-content h3 {
-    color: #b19cd9;
-    margin-bottom: 15px;
-    font-size: 1.3em;
-    text-align: center;
-}
-
-.popup-content p {
-    color: #d8bfd8;
-    margin-bottom: 15px;
-    line-height: 1.5;
-    text-align: center;
-}
-
-.popup-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.7), rgba(75, 0, 130, 0.6));
-    color: white;
-    text-decoration: none;
-    padding: 12px 25px;
-    border-radius: 14px;
-    font-weight: bold;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 
-        0 4px 20px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    margin-top: 10px;
-    animation: float 3s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.popup-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-    transition: left 0.5s;
-}
-
-.popup-btn:hover::before {
-    left: 100%;
-}
-
-.popup-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-        0 6px 30px rgba(75, 0, 130, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35),
-        0 0 25px rgba(138, 43, 226, 0.4);
-    background: linear-gradient(135deg, rgba(155, 48, 255, 0.8), rgba(90, 26, 140, 0.7));
-    border-color: rgba(255, 255, 255, 0.35);
-    animation: float 2s ease-in-out infinite;
-}
-
-/* Музыкальный проигрыватель */
-.music-player {
-    background: linear-gradient(135deg, rgba(40, 13, 56, 0.3), rgba(75, 0, 130, 0.2));
-    border-radius: 16px;
-    padding: 15px;
-    margin-top: 15px;
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 
-        0 4px 20px rgba(75, 0, 130, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    position: relative;
-    overflow: hidden;
-}
-
-.player-controls {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
-}
-
-.control-btn {
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.7), rgba(155, 48, 255, 0.6));
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 
-        0 4px 16px rgba(75, 0, 130, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    animation: float 3.5s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
-}
-
-.control-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.4s, height 0.4s;
-}
-
-.control-btn:hover::before {
-    width: 100%;
-    height: 100%;
-}
-
-.control-btn:hover {
-    background: linear-gradient(135deg, rgba(155, 48, 255, 0.8), rgba(138, 43, 226, 0.7));
-    border-color: rgba(255, 255, 255, 0.35);
-    transform: scale(1.1);
-    box-shadow: 
-        0 6px 24px rgba(75, 0, 130, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 0 20px rgba(138, 43, 226, 0.4);
-    animation: float 2s ease-in-out infinite;
-}
-
-.track-info {
-    flex-grow: 1;
-}
-
-.track-name {
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-bottom: 2px;
-}
-
-.artist-name {
-    color: #b19cd9;
-    font-size: 0.8em;
-}
-
-.progress-container {
-    width: 100%;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(177, 156, 217, 0.2);
-    border-radius: 10px;
-    cursor: pointer;
-    margin-bottom: 5px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    position: relative;
-}
-
-.progress-bar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-    0% {
-        transform: translateX(-100%);
-    }
-    100% {
-        transform: translateX(100%);
-    }
-}
-
-.progress {
-    height: 100%;
-    background: linear-gradient(90deg, rgba(138, 43, 226, 0.8), rgba(155, 48, 255, 0.9));
-    border-radius: 10px;
-    width: 0%;
-    transition: width 0.1s ease;
-    box-shadow: 
-        0 0 10px rgba(138, 43, 226, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.progress::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: progressShine 1.5s infinite;
-}
-
-@keyframes progressShine {
-    0% {
-        transform: translateX(-100%);
-    }
-    100% {
-        transform: translateX(100%);
-    }
-}
-
-.time {
-    display: flex;
-    justify-content: space-between;
-    color: #b19cd9;
-    font-size: 0.7em;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .main-content {
-        grid-template-columns: 1fr;
-    }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Глеб Редкин</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Видео фон -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline webkit-playsinline id="bgVideo">
+            <source src="background.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео фон.
+        </video>
+        <div class="video-overlay"></div>
+    </div>
     
-    .profile-header {
-        flex-direction: column;
-        text-align: center;
-    }
+    <!-- Всплывающее окно с рефералкой -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup">
+            <button class="popup-close" id="popupClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="popup-content">
+                <h3>Привет! Часто сталкиваешься с блокировками в РФ?</h3>
+                <p>Это ПО поможет обходить блокировки игр и приложений в РФ. (Roblox, Cursor, YouTube и тд)</p>
+                <p>Это займет всего пару секунд, но тебе точно это поможет </p>
+                <a href="https://t.me/siriusvpnbot?start=R_c6q145" class="popup-btn" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                    Перейти за ПО
+                </a>
+            </div>
+        </div>
+    </div>
     
-    .profile-actions {
-        flex-direction: row;
-        justify-content: center;
-    }
-    
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    #bgVideo {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        min-width: 100%;
-        min-height: 100%;
-        width: auto;
-        height: auto;
-        object-fit: cover;
-        -webkit-transform: translate(-50%, -50%);
-        -moz-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-    }
-    
-    .video-background {
-        background: #1b2838;
-    }
-    
-    .player-controls {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .track-info {
-        text-align: center;
-    }
-    
-    .popup {
-        padding: 20px;
-        margin: 20px;
-    }
-    
-    /* Уменьшаем анимацию на мобильных для лучшей производительности */
-    .btn-message, .btn-more, .control-btn, .menu-item, .popup-btn {
-        animation-duration: 4s;
-    }
-    
-    /* Уменьшаем размытие на мобильных для производительности */
-    .profile-header, .side-menu, .content-box, .popup {
-        backdrop-filter: blur(20px) saturate(150%);
-        -webkit-backdrop-filter: blur(20px) saturate(150%);
-    }
-}
+    <div class="container">
+        <!-- Верхняя часть профиля -->
+        <header class="profile-header">
+            <div class="profile-avatar">
+                <img src="avatar.jpg" alt="Аватар" class="avatar-img">
+            </div>
+            
+            <div class="profile-info">
+                <h1 class="profile-name">Глеб Редкин</h1>
+                <div class="profile-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Yekaterinburg, Sverdlovsk, Russian Federation
+                </div>
+                <div class="profile-title">Тот самый SyreX и 4уVаaak</div>
+                
+                <!-- Музыкальный проигрыватель -->
+                <div class="music-player">
+                    <div class="player-controls">
+                        <button class="control-btn play-btn" id="playBtn">
+                            <i class="fas fa-play" id="playIcon"></i>
+                        </button>
+                        <div class="track-info">
+                            <div class="track-name">Типичная вечеринка с бассейном</div>
+                            <div class="artist-name">Пошлая Молли</div>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress" id="progress"></div>
+                        </div>
+                        <div class="time">
+                            <span id="currentTime">0:00</span>
+                        </div>
+                    </div>
+                    <audio id="audioPlayer" preload="metadata">
+                        <source src="music.mp3" type="audio/mpeg">
+                        Ваш браузер не поддерживает аудио элемент.
+                    </audio>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="btn-message" onclick="window.open('https://t.me/rdkgl', '_blank')">
+                    <i class="fas fa-comment"></i>
+                    Написать
+                </button>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Левое меню -->
+            <nav class="side-menu">
+                <div class="menu-section">
+                    <h3>Профиль</h3>
+                    <ul>
+                        <li><a href="#" class="menu-item active" data-tab="biography">
+                            <i class="fas fa-user"></i>Биография
+                        </a></li>
+                        <li><a href="#" class="menu-item" data-tab="donate">
+                            <i class="fas fa-heart"></i>Донат
+                        </a></li>
+                        <li><a href="#" class="menu-item" data-tab="skills">
+                            <i class="fas fa-cogs"></i>Умения
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div class="menu-section">
+                    <h3>Соцсети</h3>
+                    <ul>
+                        <li><a href="https://t.me/rdkgl" class="menu-item" target="_blank">
+                            <i class="fab fa-telegram"></i>Телеграмм
+                        </a></li>
+                        <li><a href="https://vk.com/rdkgl" class="menu-item" target="_blank">
+                            <i class="fab fa-vk"></i>ВКонтакте
+                        </a></li>
+                        <li><a href="https://steamcommunity.com/id/RDKGL/" class="menu-item" target="_blank">
+                            <i class="fab fa-steam"></i>Steam
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Правая часть - контент -->
+            <div class="content-area">
+                <!-- Биография -->
+                <div class="tab-content active" id="biography">
+                    <div class="content-box">
+                        <h2>Биография</h2>
+                        <div class="bio-content">
+                            <p>Всем привет! Я обычный школяр из малоизвестного города. Мающийся непонятно чем. </p>
+                            <p>Пытаюсь все время заработать, но никогда еще не удавалось. Шарю по некоторым языкам програмирования(не полностью).</p>
+                                        <p>Могу подсказать по подбору телефонов, побобрать сборочку к пк и тд. Слушаю очень много что, soundcloud монстр. </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Донат -->
+                <div class="tab-content" id="donate">
+                    <div class="content-box">
+                        <h2>Поддержать проект</h2>
+                        
+                        <div class="payment-method">
+                            <h3>💳 T-Bank</h3>
+                            <div class="payment-info">2200702054515924</div>
+                        </div>
+
+                        <div class="payment-method">
+                            <h3>💳 Ю-Money </h3>
+                            <div class="payment-info">2204120132342698</div>
+                        </div>
+
+                        <div class="payment-method">
+                            <h3>💎 USDT (TON)</h3>
+                            <div class="payment-info">UQCKy0yboUlL8OjJ8fStASMo_2y1agBgnmf-f0FsMy19bXbl</div>
+                        </div>
+
+                        <div class="payment-method">
+                            <h3>💎 USDT (TRC20)</h3>
+                            <div class="payment-info">TBZsEcJFiunXztwW62enyqh5KwEZ8E4ELD</div>
+                        </div>
+
+                        <div class="payment-method">
+                            <h3>⚡ TON</h3>
+                            <div class="payment-info">UQCKy0yboUlL8OjJ8fStASMo_2y1agBgnmf-f0FsMy19bXbl</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Умения -->
+                <div class="tab-content" id="skills">
+                    <div class="content-box">
+                        <h2>Умения и Навыки</h2>
+                        <div class="skills-grid">
+                            <div class="skill-category">
+                                <h3>Профессиональные</h3>
+                                <ul>
+                                    <li>Веб-разработка: HTML, CSS </li>
+                                    <li>Дизайн: CSS</li>
+                                    <li>Программирование: PYTHON, HTML, C++</li>
+                                    <li>Аналитика</li>
+                                </ul>
+                            </div>
+                            <div class="skill-category">
+                                <h3>Личные</h3>
+                                <ul>
+                                    <li>Коммуникация: легкая </li>
+                                    <li>Творчество: отсутвует вроде</li>
+                                    <li>Решение проблем: "моментальное"</li>
+                                    <li>Обучаемость: не чето не хочу пока</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
