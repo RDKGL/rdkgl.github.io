@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('.menu-item');
     const tabContents = document.querySelectorAll('.tab-content');
     
+    // Добавляем задержки для анимации элементов меню
+    menuItems.forEach((item, index) => {
+        item.style.setProperty('--i', index);
+    });
+    
     menuItems.forEach(item => {
         item.addEventListener('click', function(e) {
             if (this.getAttribute('data-tab')) {
@@ -50,10 +55,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const bgVideo = document.getElementById('bgVideo');
     bgVideo.muted = true;
     bgVideo.volume = 0;
+    bgVideo.setAttribute('playsinline', '');
+    bgVideo.setAttribute('webkit-playsinline', '');
+    
+    // Попытка воспроизведения на мобильных устройствах
+    const playPromise = bgVideo.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            // Автовоспроизведение не удалось, пробуем при первом взаимодействии пользователя
+            document.addEventListener('touchstart', function playVideo() {
+                bgVideo.play().catch(() => {});
+                document.removeEventListener('touchstart', playVideo);
+            }, { once: true });
+        });
+    }
     
     bgVideo.addEventListener('ended', function() {
         this.currentTime = 0;
         this.play();
+    });
+    
+    // Обработка для мобильных устройств
+    bgVideo.addEventListener('loadedmetadata', function() {
+        this.play().catch(() => {});
     });
     
     // Музыкальный проигрыватель
