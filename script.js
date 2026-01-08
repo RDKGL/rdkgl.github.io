@@ -1,151 +1,77 @@
-
-// Переключение вкладок
-document.addEventListener('DOMContentLoaded', function() {
-    const menuItems = document.querySelectorAll('.menu-item');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    // Добавляем задержки для анимации элементов меню
-    menuItems.forEach((item, index) => {
-        item.style.setProperty('--i', index);
-    });
-    
-    menuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            if (this.getAttribute('data-tab')) {
-                e.preventDefault();
-                
-                menuItems.forEach(i => i.classList.remove('active'));
-                tabContents.forEach(tab => tab.classList.remove('active'));
-                
-                this.classList.add('active');
-                const tabId = this.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-            }
-        });
-    });
-    
-    // Функция для копирования платежных реквизитов
-    const paymentElements = document.querySelectorAll('.payment-info');
-    
-    paymentElements.forEach(element => {
-        element.addEventListener('click', function() {
-            const textToCopy = this.textContent;
-            
-            const textarea = document.createElement('textarea');
-            textarea.value = textToCopy;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            
-            const originalText = this.textContent;
-            this.textContent = 'Скопировано!';
-            this.style.background = '#8a2be2';
-            this.style.color = 'white';
-            
-            setTimeout(() => {
-                this.textContent = originalText;
-                this.style.background = '';
-                this.style.color = '';
-            }, 2000);
-        });
-    });
-    
-    // Управление видео фоном
-    const bgVideo = document.getElementById('bgVideo');
-    bgVideo.muted = true;
-    bgVideo.volume = 0;
-    bgVideo.setAttribute('playsinline', '');
-    bgVideo.setAttribute('webkit-playsinline', '');
-    
-    // Попытка воспроизведения на мобильных устройствах
-    const playPromise = bgVideo.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            // Автовоспроизведение не удалось, пробуем при первом взаимодействии пользователя
-            document.addEventListener('touchstart', function playVideo() {
-                bgVideo.play().catch(() => {});
-                document.removeEventListener('touchstart', playVideo);
-            }, { once: true });
-        });
+class Particle {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2;
+        this.opacity = Math.random() * 0.5 + 0.3;
+        this.maxOpacity = this.opacity;
     }
-    
-    bgVideo.addEventListener('ended', function() {
-        this.currentTime = 0;
-        this.play();
-    });
-    
-    // Обработка для мобильных устройств
-    bgVideo.addEventListener('loadedmetadata', function() {
-        this.play().catch(() => {});
-    });
-    
-    // Музыкальный проигрыватель
-    const audioPlayer = document.getElementById('audioPlayer');
-    const playBtn = document.getElementById('playBtn');
-    const playIcon = document.getElementById('playIcon');
-    const progressBar = document.getElementById('progressBar');
-    const progress = document.getElementById('progress');
-    const currentTime = document.getElementById('currentTime');
-    
-    let isPlaying = false;
-    
-    // Воспроизведение/пауза
-    playBtn.addEventListener('click', function() {
-        if (isPlaying) {
-            audioPlayer.pause();
-            playIcon.className = 'fas fa-play';
-        } else {
-            audioPlayer.play();
-            playIcon.className = 'fas fa-pause';
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // Отскок от краев
+        if (this.x < 0 || this.x > this.canvas.width) {
+            this.speedX *= -1;
+            this.x = Math.max(0, Math.min(this.canvas.width, this.x));
         }
-        isPlaying = !isPlaying;
-    });
-    
-    // Обновление прогресса
-    audioPlayer.addEventListener('timeupdate', function() {
-        const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-        progress.style.width = percent + '%';
-        
-        // Форматирование времени
-        const minutes = Math.floor(audioPlayer.currentTime / 60);
-        const seconds = Math.floor(audioPlayer.currentTime % 60);
-        currentTime.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-    });
-    
-    // Перемотка по клику на прогресс-бар
-    progressBar.addEventListener('click', function(e) {
-        const rect = this.getBoundingClientRect();
-        const percent = (e.clientX - rect.left) / rect.width;
-        audioPlayer.currentTime = percent * audioPlayer.duration;
-    });
-    
-    // Сброс при окончании трека
-    audioPlayer.addEventListener('ended', function() {
-        playIcon.className = 'fas fa-play';
-        isPlaying = false;
-        progress.style.width = '0%';
-        currentTime.textContent = '0:00';
-    });
-    
-    // Всплывающее окно
-    const popupOverlay = document.getElementById('popupOverlay');
-    const popupClose = document.getElementById('popupClose');
-    
-    // Показываем popup при загрузке
-    setTimeout(() => {
-        popupOverlay.style.display = 'flex';
-    }, 1000);
-    
-    // Закрытие popup
-    popupClose.addEventListener('click', function() {
-        popupOverlay.style.display = 'none';
-    });
-    
-    // Закрытие по клику на overlay
-    popupOverlay.addEventListener('click', function(e) {
-        if (e.target === popupOverlay) {
-            popupOverlay.style.display = 'none';
+        if (this.y < 0 || this.y > this.canvas.height) {
+            this.speedY *= -1;
+            this.y = Math.max(0, Math.min(this.canvas.height, this.y));
         }
-    });
+
+        // Пульсирующая прозрачность
+        this.opacity += (Math.random() - 0.5) * 0.05;
+        this.opacity = Math.max(0.2, Math.min(this.maxOpacity, this.opacity));
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Установка размера canvas
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Создание частиц
+    const particleCount = 100;
+    const particles = [];
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle(canvas));
+    }
+
+    // Анимационный цикл
+    function animate() {
+        // Очистка canvas с черным фоном
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Обновление и рисование частиц
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw(ctx);
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
 });
